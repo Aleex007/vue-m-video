@@ -1,10 +1,16 @@
 {
-  "name": "vue-video-m",
-  "version": "0.1.0",
-  "private": true,
+  "name": "vue-m-video",
+  "version": "1.0.0",
+  "author": "AleeX007",
+  "description": "基于vue的移动端视频播放器",
+  "main": "lib/vue-m-video.umd.min.js",
+  "keyword": "vue video 移动端",
+  "license": "MIT",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib --name vue-m-video --dest lib packages/index.js"
   },
   "dependencies": {
     "core-js": "^3.6.5",

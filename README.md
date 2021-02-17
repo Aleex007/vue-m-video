@@ -1,4 +1,4 @@
-# vue-video-m
+# vue-m-video
 
 ## Project setup
 ```
