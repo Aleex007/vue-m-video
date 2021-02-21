@@ -1,16 +1,19 @@
 <template>
     <div class="ove-video">
         <video 
+            class="vide-item"
             ref="video"
             :muted="muted"
             playsinline
-            webkit-playsinline
+            webkit-playsinline="true"
             x5-playsinline
             x5-video-player-type="h5"
             x-webkit-airplay="allow"
             :x5-video-player-fullscreen="fullscreen"
             :autoplay="false"
-            controls>
+            controls
+            :width="width"
+            :height="height">
             <source v-for="(item, index) in urlArry" :key="index" :src="item" :type="`video/${getUrlType(item)}`">
         </video>
     </div>
@@ -18,7 +21,7 @@
 
 <script>
 export default {
-    name: 'vue-m-video',
+    name: 'm-vue-video',
     props: {
         muted: { // 是否静音
             type: Boolean,
@@ -28,13 +31,21 @@ export default {
             type: Boolean,
             default: false
         },
-        url: {
+        url: { // 视频地址
             type: Array | String,
             default: ''
         },
-        mediaType: {
+        mediaType: { // 视频类型
             type: String,
             default: null
+        },
+        width: { // 播放器宽度
+            type: String,
+            default: '100%'
+        },
+        height: { // 播放器高度
+            type: String,
+            default: '100%'
         }
     },
     data() {
@@ -67,6 +78,12 @@ export default {
 
 <style lang="scss" scoped>
 .ove-video{
+    .vide-item{
+        position: absolute;
+        z-index: 9;
+        left: 0;
+        top: 0;
+    }
     width: 100%;
     height: 100%;
 }

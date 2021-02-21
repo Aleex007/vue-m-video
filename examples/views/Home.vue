@@ -1,21 +1,34 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <vue-m-video :url="`https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4`"></vue-m-video>
+      <div class="abs-box"></div>
+    <m-vue-video :height="`40%`" :url="`https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4`" mediaType="mp4"></m-vue-video>
   </div>
 </template>
 
 <script>
-import VueMVideo from '../../packages/vue-m-video/src/vue-m-video.vue'
-// @ is an alias to /src
-import HelloWorld from '../components/HelloWorld.vue'
-
+import MVueVideo from '../../packages/m-vue-video/src/m-vue-video.vue'
 export default {
   name: 'Home',
   components: {
-    HelloWorld,
-    VueMVideo
+    MVueVideo
   }
 }
 </script>
+
+<style scoped>
+.abs-box{
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+.home{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #000;
+}
+</style>
