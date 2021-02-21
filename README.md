@@ -15,8 +15,8 @@ Vue.use(MVueVideo)
 ## 参数
 |名称|类型|可选值|默认值|说明|
 |----|----|----|----|-----|
-|muted|boolean|false/ture|false|是否静音播放|
-|fullscreen|boolean|false/ture|false|是否全屏|
+|muted|boolean|false/true|false|是否静音播放|
+|fullscreen|boolean|false/true|false|是否全屏|
 |url|string|-|-|视频地址|
 |mediaType|string|mp4等|-|视频类型(不填时会根据视频地址自动判断/.MOV类型视频请传mp4)|
 |width|string|像素值|100%|播放器宽度|
