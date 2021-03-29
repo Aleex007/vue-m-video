@@ -8,6 +8,8 @@
         :loop="true"
         @on-pause="onPause" 
         @on-play="onPlay"
+        @on-fullscreenchange="onFullscreenchange"
+        :fullscreen.sync="fullscreen"
         :url="`https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4`"
         mediaType="mp4"></m-vue-video>
   </div>
@@ -20,7 +22,8 @@ export default {
   data() {
       return {
           muted: true,
-          currentTime: 0
+          currentTime: 0,
+          fullscreen: true
       }
   },
   components: {
@@ -32,6 +35,9 @@ export default {
       },100)
   },
   methods: {
+      onFullscreenchange(e) {
+          console.log(e)
+      },
       onPlay() {
           console.log("play")
       },

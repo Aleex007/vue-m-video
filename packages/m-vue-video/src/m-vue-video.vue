@@ -9,7 +9,7 @@
             x5-playsinline
             x5-video-player-type="h5"
             x-webkit-airplay="allow"
-            :x5-video-player-fullscreen="fullscreen"
+            :x5-video-player-fullscreen="full"
             :autoplay="autoplay"
             :loop="loop"
             controls
@@ -17,6 +17,10 @@
             @seeked.stop="onSeeked"
             @pause="onPause"
             @play="onPlay"
+            @webkitfullscreenchange="onFullscreenchange"
+            @fullscreenchange="onFullscreenchange"
+            @mozfullscreenchange="onFullscreenchange"
+            @msfullscreenchange="onFullscreenchange"
             :width="width"
             :height="height">
             <source v-for="(item, index) in urlArry" :key="index" :src="item" :type="`video/${getUrlType(item)}`">
@@ -63,30 +67,33 @@ export default {
         currentTime: {
             type: Number,
             default: 0
+        },
+        palying: {
+            type: Boolean,
+            default: true
         }
     },
     data() {
         return {
             muteds: this.muted,
-            seeked: false
+            seeked: false,
+            full: this.fullscreen
         }
     },
     computed: {
         urlArry() {
             let _url = this.url || []
-
             if (typeof _url === 'string') _url = [_url]
             else if (Object.prototype.toString.call(_url) === '[object Object]') 
                 console.warn(new Error('视频URL只接受String或者Array'));
             return _url
         }
     },
-    mounted() {
-        this.$nextTick(() => {
-            // this.$refs.video.currentTime = 100
-        })
-    },
     methods: {
+        onFullscreenchange(e) { // 监听全屏事件
+            this.full = this.isFull();
+            this.$emit("on-fullscreenchange", {fullscreen: this.full});
+        },
         onPlay() {
             if (this.seeked)
                 return;
@@ -120,11 +127,45 @@ export default {
             } else return type
             
         },
+        requstFullscreen() { // 切换成全屏
+            const em = this.$refs.video;
+            const u = navigator.userAgent;
+            if (u.indexOf('Trident') > -1) em.msRequestFullscreen(); // IE
+            else if (u.indexOf('AppleWebKit') > -1) em.webkitRequestFullscreen(); // apple|谷歌
+            else if (u.indexOf('Firefox') > -1) em.em.mozRequestFullScreen(); // 火狐
+            else em.requestFullscreen();
+        },
+        isFull() { // 判断是否全屏
+            const em = document
+            let fullscreenElement = em.fullscreenElement || em.mozFullscreenElement || em.webkitFullscreenElement;
+            // let fullscreenEnabled = em.fullscreenEnabled || em.mozFullscreenEnabled || em.webkitFullscreenEnabled;
 
+            if (fullscreenElement == null) return false;
+            else return true
+        }
+    },
+    mounted() {
+        if(this.fullscreen) {
+            this.$nextTick(() => {
+                this.requstFullscreen();
+            })
+        }
     },
     watch: {
         currentTime(val) {
             this.$refs.video.currentTime = val
+        },
+        palying(val) {
+            this.$refs.video.paused = !val
+        },
+        full(val) {
+            this.$emit("update:fullscreen", val)
+        },
+        fullscreen(val) {
+            this.full = val
+            if (this.full) {
+                this.requstFullscreen();
+            }
         }
     }
 }

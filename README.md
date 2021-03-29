@@ -44,4 +44,4 @@ Vue.use(MVueVideo)
 |on-time-update|监听进度条改变事件|{currentTime: 1.001}|@V3.1.0+|
 |on-play|播放事件|-|@V3.2.0+|
 |on-pause|暂停事件|-|@V3.2.0+|
-
+|on-fullscreenchange|监听全屏事件|{fullscreen: true}|@V3.3.0+|
