@@ -1,6 +1,6 @@
 {
   "name": "m-vue-video",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "author": "AleeX007",
   "description": "基于vue的移动端视频播放器",
   "main": "lib/m-vue-video.umd.min.js",

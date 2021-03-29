@@ -127,7 +127,15 @@ export default {
             } else return type
             
         },
-        requstFullscreen() { // 切换成全屏
+        requestExitFull() { // 退出全屏
+            const em = document;
+            const u = navigator.userAgent;
+            if (u.indexOf('Trident') > -1) em.msExitFullscreen(); // IE
+            else if (u.indexOf('AppleWebKit') > -1) em.webkitExitFullscreen(); // apple|谷歌
+            else if (u.indexOf('Firefox') > -1) em.em.mozCancelFullScreen(); // 火狐
+            else em.exitFullscreen();
+        },
+        requestFullscreen() { // 切换成全屏
             const em = this.$refs.video;
             const u = navigator.userAgent;
             if (u.indexOf('Trident') > -1) em.msRequestFullscreen(); // IE
@@ -147,7 +155,7 @@ export default {
     mounted() {
         if(this.fullscreen) {
             this.$nextTick(() => {
-                this.requstFullscreen();
+                this.requestFullscreen();
             })
         }
     },
@@ -163,9 +171,8 @@ export default {
         },
         fullscreen(val) {
             this.full = val
-            if (this.full) {
-                this.requstFullscreen();
-            }
+            if (this.full) this.requestFullscreen();
+            else this.requestExitFull();
         }
     }
 }
