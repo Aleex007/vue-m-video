@@ -3,15 +3,20 @@
         <video 
             class="vide-item"
             ref="video"
-            :muted="muted"
+            :muted="muteds"
             playsinline
             webkit-playsinline="true"
             x5-playsinline
             x5-video-player-type="h5"
             x-webkit-airplay="allow"
             :x5-video-player-fullscreen="fullscreen"
-            :autoplay="false"
+            :autoplay="autoplay"
+            :loop="loop"
             controls
+            @timeupdate="onDuration"
+            @seeked.stop="onSeeked"
+            @pause="onPause"
+            @play="onPlay"
             :width="width"
             :height="height">
             <source v-for="(item, index) in urlArry" :key="index" :src="item" :type="`video/${getUrlType(item)}`">
@@ -46,11 +51,24 @@ export default {
         height: { // 播放器高度
             type: String,
             default: '100%'
+        },
+        autoplay: { // 自动播放
+            type: Boolean,
+            default: false
+        },
+        loop: { // 循环播放
+            type: Boolean,
+            default: false
+        },
+        currentTime: {
+            type: Number,
+            default: 0
         }
     },
     data() {
         return {
-            
+            muteds: this.muted,
+            seeked: false
         }
     },
     computed: {
@@ -63,7 +81,37 @@ export default {
             return _url
         }
     },
+    mounted() {
+        this.$nextTick(() => {
+            // this.$refs.video.currentTime = 100
+        })
+    },
     methods: {
+        onPlay() {
+            if (this.seeked)
+                return;
+            this.$emit("on-play")
+        },
+        onPause() { // 暂停事件
+            if (this.seeked)
+                return;
+            this.$emit("on-pause")
+        },
+        onSeeked() {
+            this.seeked = true
+            this.$nextTick(() => {
+                this.$emit("on-seeked", { currentTime: this.$refs.video.currentTime })
+                setTimeout(() => {
+                    this.seeked = false
+                },300)
+            })
+        },
+        onDuration(e) {
+            this.$nextTick(() => {
+                this.$emit("on-time-update", { currentTime: this.$refs.video.currentTime })
+            })
+            
+        },
         getUrlType(url) { // 通过视频地址获取视频类型
             let type = this.mediaType || null
             if (type === null || type === '') {
@@ -71,6 +119,12 @@ export default {
                 return u.match(/[^\.]+(?=\?)/) || 'mp4';
             } else return type
             
+        },
+
+    },
+    watch: {
+        currentTime(val) {
+            this.$refs.video.currentTime = val
         }
     }
 }
@@ -83,6 +137,8 @@ export default {
         z-index: 9;
         left: 0;
         top: 0;
+        object-fit: cover;
+        background-color: #000;
     }
     width: 100%;
     height: 100%;
